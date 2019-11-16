@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    <hibernate-mapping>
+    	<class name="com.crm.customer.domain.Customer" table="crm_cm_customer">
+    		<id name="cust_id">
+    			<generator class="native"></generator>
+    		</id>
+    		<property name="cust_name"/>
+    		<property name="cust_phone"/>
+    		<property name="cust_address"/>
+    		<property name="cust_mail"/>
+    		<property name="cust_comm"/>
+    		<property name="cust_code"/>
+    		<property name="cust_money"/>
+    		<property name="cust_registman"/>
+    		<property name="cust_yearmoney"/>
+    		<property name="cust_bank"/>
+    		<property name="cust_bankid"/>
+    		<property name="cust_date"/>
+    		<many-to-one name="cust_source" class="com.crm.basedict.domain.BaseDict" column="cust_source" ></many-to-one>
+    		<many-to-one name="cust_level" class="com.crm.basedict.domain.BaseDict" column="cust_level" ></many-to-one>
+    		<many-to-one name="cust_indursty" class="com.crm.basedict.domain.BaseDict" column="cust_indursty" ></many-to-one>
+    		<many-to-one name="cust_area" class="com.crm.basedict.domain.BaseDict" column="cust_area" ></many-to-one>
+    		<many-to-one name="cust_respman" class="com.crm.user.domain.User" column="cust_respman" ></many-to-one>
+    		<set name="linkManSet" cascade="delete" inverse="true">
+    			<key column="lkm_customer"></key>
+    			<one-to-many class="com.crm.linkman.domain.LinkMan"/>
+    		</set>
+    		
+    		<set name="saleVistSet" cascade="delete" inverse="true">
+    			<key column="sv_cust_id"></key>
+    			<one-to-many class="com.crm.sale.domain.SaleVist"/>
+    		</set>
+    		
+    		
+    	</class>
+    </hibernate-mapping>

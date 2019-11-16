@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<!-- 第二种方式通过context方式 -->
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+	
+	<!-- Spring整合hibernate -->
+	<!-- 引入c3p0外部连接池 -->
+	<!-- 配置c3p0连接池 ================-->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driverClass}"></property>
+		<property name="jdbcUrl" value="${jdbc.jdbcUrl}"></property>
+		<property name="user" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+	</bean>
+	
+	<!-- 引入hibernate的配置信息================ -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<!-- 注入连接池 -->
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- 注入hibernate中的可选属性 -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql" >true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+		<property name="mappingResources">
+			<list>
+				<value>com/crm/basedict/domain/BaseDict.hbm.xml</value>
+				<value>com/crm/sale/domain/SaleChance.hbm.xml</value>
+				<value>com/crm/user/domain/User.hbm.xml</value>
+				<value>com/crm/sale/domain/SalePlan.hbm.xml</value>
+				<value>com/crm/customer/domain/Customer.hbm.xml</value>
+				<value>com/crm/linkman/domain/LinkMan.hbm.xml</value>
+				<value>com/crm/sale/domain/SaleVist.hbm.xml</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 配置事务管理器======== -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- 开启事务注解 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<!-- baseDict数据字典的三层架构配置 -->
+	<bean id="baseDictAction" class="com.crm.basedict.web.action.BaseDictAction" scope="prototype">
+		<property name="baseDictService" ref="baseDictService"></property>
+	</bean>
+	<bean id="baseDictService" class="com.crm.basedict.service.impl.BaseDictServiceImpl" >
+		<property name="baseDictDao" ref="baseDictDao"></property>
+	</bean>
+	<bean id="baseDictDao" class="com.crm.basedict.dao.impl.BaseDictDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- saleChance销售机会的三层架构配置 -->
+	<bean id="saleChanceAction" class="com.crm.sale.web.action.SaleChanceAction" scope="prototype">
+		<property name="saleChanceService" ref="saleChanceService"></property>
+		<property name="baseDictService" ref="baseDictService"></property>
+		<property name="userService" ref="userService"></property>
+	</bean>
+	<bean id="saleChanceService" class="com.crm.sale.service.impl.SaleChanceServiceImpl" >
+		<property name="saleChanceDao" ref="saleChanceDao"></property>
+	</bean>
+	<bean id="saleChanceDao" class="com.crm.sale.dao.impl.SaleChanceDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- user系统用户的三层架构 -->
+	<bean id="userAction" class="com.crm.user.web.action.UserAction" scope="prototype">
+		<property name="userService" ref="userService"></property>
+		<property name="baseDictService" ref="baseDictService"></property>
+	</bean>
+	<bean id="userService" class="com.crm.user.service.impl.UserServiceImpl" >
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+	<bean id="userDao" class="com.crm.user.dao.impl.UserDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- salePlan开发计划的三层架构 -->
+	<bean id="salePlanAction" class="com.crm.sale.web.action.SalePlanAction" scope="prototype">
+		<property name="salePlanService" ref="salePlanService"></property>
+		<property name="saleChanceService" ref="saleChanceService"></property>
+		<property name="baseDictService" ref="baseDictService"></property>
+	</bean>
+	<bean id="salePlanService" class="com.crm.sale.service.impl.SalePlanServiceImpl">
+		<property name="salePlanDao" ref="salePlanDao"></property>
+	</bean>
+	<bean id="salePlanDao" class="com.crm.sale.dao.impl.SalePlanDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- customer客户的三层结构 -->
+	<bean id="customerAction" class="com.crm.customer.web.action.CustomerAction" scope="prototype">
+		<property name="customerService" ref="customerService"></property>
+		<property name="saleChanceService" ref="saleChanceService"></property>
+		<property name="baseDictService" ref="baseDictService"></property>
+	</bean>
+	<bean id="customerService" class="com.crm.customer.service.impl.CustomerServiceImpl">
+		<property name="customerDao" ref="customerDao"></property>
+	</bean>
+	<bean id="customerDao" class="com.crm.customer.dao.impl.CustomerDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- linkMan联系人的三层结构 -->
+	<bean id="linkManAction" class="com.crm.linkman.web.action.LinkManAction" scope="prototype">
+		<property name="linkManService" ref="linkManService"></property>
+		<property name="customerService" ref="customerService"></property>
+	</bean>
+	<bean id="linkManService" class="com.crm.linkman.service.impl.LinkManServiceImpl">
+		<property name="linkManDao" ref="linkManDao"></property>
+	</bean>
+	<bean id="linkManDao" class="com.crm.linkman.dao.impl.LinkManDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- salevist客户交往记录的三层结构 -->
+	<bean id="saleVistAction" class="com.crm.sale.web.action.SaleVistAction" scope="prototype">
+		<property name="saleVistService" ref="saleVistService"></property>
+		<property name="customerService" ref="customerService"></property>
+	</bean>
+	<bean id="saleVistService" class="com.crm.sale.service.impl.SaleVistServiceImpl">
+		<property name="saleVistDao" ref="saleVistDao"></property>
+	</bean>
+	<bean id="saleVistDao" class="com.crm.sale.dao.impl.SaleVistDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</beans>

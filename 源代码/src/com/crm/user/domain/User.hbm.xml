@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    <hibernate-mapping>
+    	<class name="com.crm.user.domain.User" table="crm_sys_user">
+    		<id name="user_id" >
+    			<generator class="native"></generator>
+    		</id>
+    		<property name="user_loginname"/>
+    		<property name="user_password"/>
+    		<property name="user_realname"/>
+    		<many-to-one name="baseDictPermission" column="user_permission" class="com.crm.basedict.domain.BaseDict" />
+    		<property name="user_phone"/>
+    		<set name="customerSet" inverse="true" cascade="save-update,delete">
+    			<key column="cust_respman"></key>
+    			<one-to-many class="com.crm.customer.domain.Customer"/>
+    		</set>
+    		<set name="saleChanceSet" inverse="true" cascade="save-update,delete">
+    			<key column="sale_respman"></key>
+    			<one-to-many class="com.crm.sale.domain.SaleChance"/>
+    		</set>
+    		<set name="saleChanceBuildSet" inverse="true" cascade="save-update,delete">
+    			<key column="sale_buildman"></key>
+    			<one-to-many class="com.crm.sale.domain.SaleChance"/>
+    		</set>
+    		<set name="userSaleVistSet" inverse="true" cascade="save-update,delete">
+    			<key column="sv_user_id"></key>
+    			<one-to-many class="com.crm.sale.domain.SaleVist"/>
+    		</set>
+    		
+    	</class>
+    </hibernate-mapping>
+    

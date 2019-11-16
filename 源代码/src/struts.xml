@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<!-- 配置action的常量 (如下是修改默认的后缀名)-->
+	<constant name="struts.action.extension" value="action"></constant>
+		<package name="crm" extends="struts-default" namespace="/">
+		
+			<!-- 配置自定义拦截器 -->
+			<interceptors>
+				<interceptor name="userInterceptor" class="com.crm.user.web.interceptor.UserInterceptor"></interceptor>
+			</interceptors>
+			
+			<!-- BaseDict的action配置 -->
+			<action name="baseDict_*" class="baseDictAction" method="{1}">
+				<interceptor-ref name="userInterceptor"/>
+				<interceptor-ref name="defaultStack"/>
+				<result name="editUI">/jsp/basedict/edit.jsp</result>
+				<result name="editSuccess" type="redirectAction">baseDict_findByPage.action</result>
+				<result name="addUI">/jsp/basedict/add.jsp</result>
+				<result name="addSuccess" type="redirectAction">baseDict_findByPage.action</result>
+				<result name="deleteSuccess" type="redirectAction">baseDict_findByPage.action</result>
+				<result name="findSuccess" >/jsp/basedict/list.jsp</result>
+			</action>
+			
+			<!-- SaleChance的action配置 -->
+			<action name="saleChance_*" class="saleChanceAction" method="{1}">
+				<interceptor-ref name="userInterceptor"/>
+				<interceptor-ref name="defaultStack"/>
+				<result name="findSuccess">/jsp/salechance/list.jsp</result>
+				<result name="addUI">/jsp/salechance/add.jsp</result>
+				<result name="addSuccess" type="redirectAction">saleChance_findByPage.action</result>
+				<result name="deleSuccess" type="redirectAction">saleChance_findByPage.action</result>
+				<result name="editUI" >/jsp/salechance/edit.jsp</result>
+				<result name="editSuccess" type="redirectAction">saleChance_findByPage.action</result>
+				<result name="input" >/jsp/salechance/list.jsp</result>
+				<result name="appointUI" >/jsp/salechance/apponit.jsp</result>
+				<result name="appointSuccess" type="redirectAction">saleChance_findByPage.action</result>
+			</action>
+			
+			<!-- user的action配置 -->
+			<action name="user_*" class="userAction" method="{1}">
+				<interceptor-ref name="userInterceptor">
+					<param name="excludeMethods">login</param>
+				</interceptor-ref>
+				<interceptor-ref name="defaultStack"/>
+				<result name="toRegistUI">/jsp/user/regist.jsp</result>
+				<result name="registSuccess" type="redirectAction">user_findByPage.action</result>
+				<result name="input" >/login.jsp</result>
+				<result name="loginSuccess" >/index.jsp</result>
+				<result name="login" >/login.jsp</result>
+				<result name="findSuccess">/jsp/user/list.jsp</result>
+				<result name="editUI">/jsp/user/edit.jsp</result>
+				<result name="editSuccess" type="redirectAction">user_findByPage.action</result>
+				<result name="delSuccess" type="redirectAction">user_findByPage.action</result>
+			</action>
+			
+			<!-- salePlan的action配置 -->
+			<action name="salePlan_*" class="salePlanAction" method="{1}">
+				<interceptor-ref name="userInterceptor"/>
+				<interceptor-ref name="defaultStack"/>
+				<result name="findSuccess">/jsp/saleplan/list.jsp</result>
+				<result name="checkUI">/jsp/saleplan/check.jsp</result>
+				<result name="addUI">/jsp/saleplan/add.jsp</result>
+				<result name="addSuccess" type="redirectAction">salePlan_checkUI.action?sale_id=${sale_id}</result>
+				<result name="input">/jsp/saleplan/add.jsp</result>
+				<result name="delSuccess" type="redirectAction">salePlan_checkUI.action?sale_id=${sale_id}</result>
+				<result name="editUI">/jsp/saleplan/edit.jsp?sale_name=${sale_name}</result>
+				<result name="editSuccess" type="redirectAction">salePlan_checkUI.action?sale_id=${sale_id}</result>
+				<result name="planFail" type="redirectAction">salePlan_findByPage.action</result>
+				<result name="planDel" type="redirectAction">salePlan_findByPage.action</result>
+				<result name="planSuccess" type="redirectAction">salePlan_findByPage.action</result>
+			</action>
+			
+			<!-- customer的action配置 -->
+			<action name="customer_*" class="customerAction" method="{1}">
+				<interceptor-ref name="userInterceptor"/>
+				<interceptor-ref name="defaultStack"/>
+				<result name="addUI">/jsp/customer/add.jsp</result>
+				<result name="addSuccess" type="redirectAction">customer_findByPage.action</result>
+				<result name="input">/jsp/customer/add.jsp</result>
+				<result name="findSuccess">/jsp/customer/list.jsp</result>
+				<result name="editUI">/jsp/customer/edit.jsp</result>
+				<result name="editSuccess" type="redirectAction">customer_findByPage.action</result>
+				<result name="deleteSuccess" type="redirectAction">customer_findByPage.action</result>
+				<result name="checkUI">/jsp/customer/check.jsp</result>
+			</action>
+			
+			<!-- linkman的action配置 -->
+			<action name="linkMan_*" class="linkManAction" method="{1}">
+				<interceptor-ref name="userInterceptor"/>
+				<interceptor-ref name="defaultStack"/>
+				<result name="findSuccess">/jsp/linkman/list.jsp</result>
+				<result name="addUI">/jsp/linkman/add.jsp</result>
+				<result name="addSuccess" type="redirectAction">linkMan_findByPage.action</result>
+				<result name="editUI" >/jsp/linkman/edit.jsp</result>
+				<result name="editSuccess" type="redirectAction">linkMan_findByPage.action</result>
+				<result name="deleteSuccess" type="redirectAction">linkMan_findByPage.action</result>
+				<result name="findByCustSuccess" >/jsp/linkman/check.jsp</result>
+			</action>
+			
+			<!-- salevist的action配置 -->
+			<action name="saleVist_*" class="saleVistAction" method="{1}">
+				<interceptor-ref name="userInterceptor"/>
+				<interceptor-ref name="defaultStack"/>
+				<result name="findSuccess">/jsp/salevist/list.jsp</result>
+				<result name="addUI">/jsp/salevist/add.jsp</result>
+				<result name="addSuccess" type="redirectAction">saleVist_findByPage.action</result>
+				<result name="editUI">/jsp/salevist/edit.jsp</result>
+				<result name="editSuccess" type="redirectAction">saleVist_findByPage.action</result>
+				<result name="delSuccess" type="redirectAction">saleVist_findByPage.action</result>
+				<result name="checkUI">/jsp/salevist/check.jsp</result>
+			</action>
+
+			
+			
+			
+		</package>
+</struts>

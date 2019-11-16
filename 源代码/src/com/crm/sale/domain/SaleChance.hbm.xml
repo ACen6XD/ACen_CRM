@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    <hibernate-mapping>
+    	<class name="com.crm.sale.domain.SaleChance" table="crm_mm_salechance">
+    		<id name="sale_id">
+    			<generator class="native"></generator>
+    		</id>
+    		<property name="sale_name"></property>
+    		<property name="sale_rate"></property>
+    		<property name="sale_comm"></property>
+    		<property name="sale_linkman"></property>
+    		<property name="sale_linkphone"></property>
+    		<many-to-one name="sale_buildman" class="com.crm.user.domain.User" ></many-to-one>
+    		<property name="sale_date"></property>
+    		<many-to-one name="sale_respman" class="com.crm.user.domain.User"></many-to-one>
+    		<property name="sale_respdate"></property>
+    		<property name="sale_status"></property>
+    		<many-to-one name="baseDictSource" class="com.crm.basedict.domain.BaseDict" column="sale_source"></many-to-one>
+    		<many-to-one name="baseDictChanceComm" class="com.crm.basedict.domain.BaseDict" column="sale_chancecomm"></many-to-one>
+    		<set name="salePlan" cascade="save-update,delete" inverse="true">
+    			<key column="plan_salechance"></key>
+    			<one-to-many class="com.crm.sale.domain.SalePlan"/>
+    		</set>
+    	</class>
+    </hibernate-mapping>

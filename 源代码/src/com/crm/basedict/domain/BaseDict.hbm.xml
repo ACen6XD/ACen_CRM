@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    
+    <hibernate-mapping>
+ 		<class name="com.crm.basedict.domain.BaseDict" table="crm_basedict">
+ 			<id name="dict_id">
+ 				<generator class="uuid"></generator>
+ 			</id>
+ 			<property name="dict_type_code"></property>
+ 			<property name="dict_type_name"></property>
+ 			<property name="dict_item_name"></property>
+ 			<set name="cust_level" cascade="delete" inverse="true">
+ 				<key column="cust_level"></key>
+ 				<one-to-many class="com.crm.customer.domain.Customer"/>
+ 			</set>
+ 			<set name="cust_source" cascade="delete" inverse="true">
+ 				<key column="cust_source"></key>
+ 				<one-to-many class="com.crm.customer.domain.Customer"/>
+ 			</set>
+ 			<set name="cust_indursty" cascade="delete" inverse="true">
+ 				<key column="cust_indursty"></key>
+ 				<one-to-many class="com.crm.customer.domain.Customer"/>
+ 			</set>
+ 			<set name="cust_area" cascade="delete" inverse="true">
+ 				<key column="cust_area"></key>
+ 				<one-to-many class="com.crm.customer.domain.Customer"/>
+ 			</set>
+ 			<set name="baseDictSource" cascade="delete" inverse="true">
+ 				<key column="sale_source"></key>
+ 				<one-to-many class="com.crm.sale.domain.SaleChance"/>
+ 			</set>
+ 			<set name="baseDictChanceComm" cascade="delete" inverse="true">
+ 				<key column="sale_chancecomm"></key>
+ 				<one-to-many class="com.crm.sale.domain.SaleChance"/>
+ 			</set>
+ 			<set name="baseDictPermission" cascade="delete" inverse="true">
+ 				<key column="user_permission"></key>
+ 				<one-to-many class="com.crm.user.domain.User"/>
+ 			</set>
+ 		</class>
+    </hibernate-mapping>
+    

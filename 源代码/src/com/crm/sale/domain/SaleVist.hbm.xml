@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+    <hibernate-mapping>
+    	<class name="com.crm.sale.domain.SaleVist" table="crm_cm_salevist">
+    		<id name="sv_id">
+    			<generator class="native"></generator>
+    		</id>
+    		<property name="sv_date"/>
+    		<property name="sv_address"/>
+    		<property name="sv_sketch"/>
+    		<property name="sv_comm"/>
+    		<many-to-one name="sv_cust_id" class="com.crm.customer.domain.Customer" column="sv_cust_id"></many-to-one>
+    		<many-to-one name="sv_user_id" class="com.crm.user.domain.User" column="sv_user_id"></many-to-one>
+    	</class>
+    </hibernate-mapping>
