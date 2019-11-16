@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crm.mapper.CustomerMapper">
+
+	<sql id="customer_where">
+		<where>
+			<if test="custName != null and custName !='' ">
+				c.`cust_name` like '%${custName}%'
+			</if>
+			<if test="custSource != null and custSource !=''">
+				and c.`cust_source` = #{custSource}
+			</if>
+			<if test="custIndustry != null and custIndustry !=''">
+				and c.`cust_industry`= #{custIndustry}
+			</if>
+			<if test="custLevel != null and custLevel !=''">
+				and c.`cust_level` = #{custLevel}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 根据综合条件查找客户信息 -->
+	<select id="findByQueryVo" resultType="customer" parameterType="QueryVo">
+		SELECT c.`cust_id`,
+			    c.`cust_name`,
+			    c.`cust_user_id`,
+			    c.`cust_create_id`,
+				s.`dict_item_name` `cust_source`,
+			    i.`dict_item_name` `cust_industry`,
+			    l.`dict_item_name` `cust_level`,
+			    c.`cust_linkman`,
+			    c.`cust_phone`,
+			    c.`cust_mobile`,
+			    c.`cust_zipcode`,
+			    c.`cust_address`,
+			    c.`cust_createtime`
+		FROM `day0927_bootcrm_customer` c  
+		left join `day0927_bootcrm_base_dict` s on c.`cust_source` = s.`dict_id`
+		left join `day0927_bootcrm_base_dict` i on c.`cust_industry` = i.`dict_id`
+		left join `day0927_bootcrm_base_dict` l on c.`cust_level` = l.`dict_id`
+		<include refid="customer_where"/>
+		limit #{start},#{rows};
+	</select>
+	
+	<!-- 根据综合条件查找记录总数 -->
+	<select id="countByQueryVo" resultType="int" parameterType="QueryVo">
+		SELECT count(1)
+		FROM `day0927_bootcrm_customer` c  
+		<include refid="customer_where"/>;
+	</select>
+	
+	<!-- 根据id查找用户 -->
+	<select id="findById" resultType="customer" parameterType="Integer">
+		SELECT c.`cust_id`,
+			    c.`cust_name`,
+			    c.`cust_user_id`,
+			    c.`cust_create_id`,
+				c.`cust_source`,
+			   	c.`cust_industry`,
+			    c.`cust_level`,
+			    c.`cust_linkman`,
+			    c.`cust_phone`,
+			    c.`cust_mobile`,
+			    c.`cust_zipcode`,
+			    c.`cust_address`,
+			    c.`cust_createtime`
+		FROM `day0927_bootcrm_customer` c  
+		where cust_id = #{id};
+	</select>
+	
+	<!-- 更新客户 -->
+	<update id="update" parameterType="customer">
+		UPDATE `schoolwork`.`day0927_bootcrm_customer`
+		<set>
+			<if test="cust_name!=null and cust_name!=''">
+				`cust_name` = #{cust_name},
+			</if>
+			<if test="cust_source!=null and cust_source!=''">
+				`cust_source` = #{cust_source},
+			</if>
+			<if test="cust_industry!=null and cust_industry!=''">
+				`cust_industry` = #{cust_industry},
+			</if>
+			<if test="cust_level!=null and cust_level!=''">
+				`cust_level` = #{cust_level},
+			</if>
+			<if test="cust_linkman!=null and cust_linkman!=''">
+				`cust_linkman` = #{cust_linkman},
+			</if>
+			<if test="cust_phone!=null and cust_phone!=''">
+				`cust_phone` = #{cust_phone},
+			</if>
+			<if test="cust_mobile!=null and cust_mobile!=''">
+				`cust_mobile` = #{cust_mobile},
+			</if>
+			<if test="cust_zipcode!=null and cust_zipcode!=''">
+				`cust_zipcode` = #{cust_zipcode},
+			</if>
+			<if test="cust_address!=null and cust_address!=''">
+				`cust_address` = #{cust_address},
+			</if>
+			<if test="cust_createtime!=null and cust_createtime!=''">
+				`cust_createtime` = #{cust_createtime}
+			</if>
+		</set>
+		<where>
+			`cust_id` = #{cust_id};
+		</where>
+	</update>
+	
+	<!-- 删除用户 -->
+	<delete id="delete" parameterType="Integer">
+		DELETE FROM `schoolwork`.`day0927_bootcrm_customer`
+		<where>
+			`day0927_bootcrm_customer`.`cust_id` = #{cust_id}
+		</where>
+	</delete>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>
